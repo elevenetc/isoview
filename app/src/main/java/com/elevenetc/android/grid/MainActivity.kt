@@ -3,7 +3,6 @@ package com.elevenetc.android.grid
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.elevenetc.android.grid.dynamic.DynamicItem
 import com.elevenetc.android.grid.dynamic.DynamicMap
 import com.elevenetc.android.grid.dynamic.Utils
 import com.elevenetc.android.grid.views.Cube
@@ -28,12 +27,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun update(gridView: GridMatrixView) {
         gridView.postDelayed({
-            moving.isoX++
-            Utils.layout(moving)
+            moving.isoX += 0.01f
+            Utils.layout(moving, false)
             gridView.invalidate()
 
             update(gridView)
-        }, 1000L)
+        }, 100L)
     }
 
     private fun initDynamicMap(): DynamicMap {

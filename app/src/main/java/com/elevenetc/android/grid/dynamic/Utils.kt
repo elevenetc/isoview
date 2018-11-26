@@ -3,12 +3,12 @@ package com.elevenetc.android.grid.dynamic
 class Utils {
     companion object {
 
-        fun layout(square: Square) {
+        fun layout(square: Square, k: Boolean) {
 
             val unitWidth = square.unitWidth
             val unitHeight = square.unitHeight
-            val x = square.isoX / 100
-            val y = square.isoY / 100
+            val x = square.isoX
+            val y = square.isoY
 
             val isoX = x * (unitWidth / 2) - y * (unitWidth / 2)
             val isoY = (x + y) * (unitHeight / 2)
@@ -18,7 +18,21 @@ class Utils {
             square.leftPoint = PointF(isoX - unitWidth / 2, isoY + unitHeight / 2)
             square.rightPoint = PointF(isoX + unitWidth / 2, isoY + unitHeight / 2)
 
-
+//            if (k) {
+//                square.isoX = 0.5f
+//                val unitWidth = square.unitWidth
+//                val unitHeight = square.unitHeight
+//                val x = square.isoX
+//                val y = square.isoY
+//
+//                val isoX = x * (unitWidth / 2) - y * (unitWidth / 2)
+//                val isoY = (x + y) * (unitHeight / 2)
+//
+//                square.topPoint = PointF(isoX, isoY)
+//                square.bottomPoint = PointF(isoX, isoY + unitHeight)
+//                square.leftPoint = PointF(isoX - unitWidth / 2, isoY + unitHeight / 2)
+//                square.rightPoint = PointF(isoX + unitWidth / 2, isoY + unitHeight / 2)
+//            }
 
         }
 
@@ -73,7 +87,7 @@ class Utils {
             }
         }
 
-        fun doOverlap(minA: Int, maxA: Int, minB: Int, maxB: Int): Boolean {
+        fun doOverlap(minA: Float, maxA: Float, minB: Float, maxB: Float): Boolean {
 
             if (minA == minB && maxA == maxB) return true
 

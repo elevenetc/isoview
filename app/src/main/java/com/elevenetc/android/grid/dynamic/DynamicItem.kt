@@ -6,10 +6,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 abstract class DynamicItem(val id: String) {
 
-    var isoX: Int = 0
-    var isoY: Int = 0
-    var isoXSize: Int = 0
-    var isoYSize: Int = 0
+    var isoX: Float = 0f
+    var isoY: Float = 0f
+    var isoXSize: Float = 0f
+    var isoYSize: Float = 0f
 
     val infont = ConcurrentLinkedQueue<DynamicItem>()
     val behind = ConcurrentLinkedQueue<DynamicItem>()

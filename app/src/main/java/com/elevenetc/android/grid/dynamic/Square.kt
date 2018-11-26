@@ -100,12 +100,12 @@ class Square(
             square.paint.color = color
             square.unitWidth = unitWidth
             square.unitHeight = unitHeight
-            square.isoX = x * 100
-            square.isoY = y * 100
-            square.isoXSize = 1 * 100
-            square.isoYSize = 1 * 100
+            square.isoX = x.toFloat()
+            square.isoY = y.toFloat()
+            square.isoXSize = 1f
+            square.isoYSize = 1f
 
-            Utils.layout(square)
+            Utils.layout(square, false)
 
             units.add(square)
 
@@ -135,10 +135,10 @@ class Square(
 
             square.paint.color = color
 
-            square.isoX = x
-            square.isoY = y
-            square.isoXSize = xSize
-            square.isoYSize = ySize
+            square.isoX = x.toFloat()
+            square.isoY = y.toFloat()
+            square.isoXSize = xSize.toFloat()
+            square.isoYSize = ySize.toFloat()
 
             units.add(square)
 
