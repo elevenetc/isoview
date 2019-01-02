@@ -39,6 +39,8 @@ class Utils {
         fun sort(units: List<DynamicItem>): MutableList<DynamicItem> {
             arrange(units)
 
+            println(units)
+
             val result = mutableListOf<DynamicItem>()
             val u = mutableListOf(*units.toTypedArray())
 

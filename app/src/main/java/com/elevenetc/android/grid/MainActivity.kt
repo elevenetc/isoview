@@ -1,8 +1,12 @@
 package com.elevenetc.android.grid
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.elevenetc.android.grid.dynamic.DynamicMap
 import com.elevenetc.android.grid.dynamic.Utils
 import com.elevenetc.android.grid.views.Cube
@@ -22,17 +26,58 @@ class MainActivity : AppCompatActivity() {
 
         gridView.init(initDynamicMap())
 
-        update(gridView)
+        val a = animate(0, 6, true, gridView)
+        val b = animate(1, 5, false, gridView)
+        val c = animate(6, 0, true, gridView)
+        val d = animate(5, 1, false, gridView)
+//        val set = AnimatorSet().apply {
+//            playSequentially(a, b, c, d)
+//        }
+
+        val set = AnimatorSet().apply {
+            playSequentially(
+                    animate(1, 2, false, gridView),
+                    animate(2, 1, false, gridView)
+            )
+        }
+
+        set.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                //set.start()
+            }
+
+        })
+
+        set.start()
     }
 
-    private fun update(gridView: GridMatrixView) {
-        gridView.postDelayed({
-            moving.isoX += 0.01f
-            Utils.layout(moving, false)
-            gridView.invalidate()
+    fun animate(from: Int, to: Int, xAxis: Boolean, grid: View): ValueAnimator {
+        return ValueAnimator.ofFloat(from.toFloat(), to.toFloat()).apply {
+            duration = 1000L
+            addUpdateListener {
 
-            update(gridView)
-        }, 100L)
+                if (xAxis) {
+                    moving.isoX = it.animatedValue as Float
+                } else {
+                    moving.isoY = it.animatedValue as Float
+                }
+
+                Utils.layout(moving, false)
+                grid.invalidate()
+            }
+        }
     }
 
     private fun initDynamicMap(): DynamicMap {
@@ -42,12 +87,12 @@ class MainActivity : AppCompatActivity() {
         val movingId = "moving"
         val units = builder
 
-                .addRect(0, 2, 10, 1, Color.RED, "long-red")
+                .addRect(1, 2, 5, 1, Color.RED, "long-red")
                 .addSquare(4, 0, Color.CYAN, "cyan")
-                .addSquare(2, 3, Color.BLUE, "blue")
-                .addSquare(0, 3, Color.YELLOW, "yellow")
+                .addSquare(3, 3, Color.BLUE, "blue")
+                .addSquare(1, 3, Color.YELLOW, "yellow")
                 .addSquare(0, 0, Color.GREEN, "green")
-                .addRect(1, 3, 1, 10, Color.GRAY, "gray")
+                .addRect(2, 3, 1, 2, Color.GRAY, "gray")
                 .addSquare(1, 0, Color.BLUE, "blue-2")
                 .addSquare(2, 0, Color.MAGENTA, "magenta")
                 .addSquare(3, 0, Color.BLACK, "black")

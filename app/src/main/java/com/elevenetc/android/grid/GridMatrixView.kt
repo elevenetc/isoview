@@ -29,7 +29,10 @@ class GridMatrixView : View {
 
     override fun onDraw(canvas: Canvas) {
         map.draw(canvas)
+//        drawDebugMatrix(canvas)
+    }
 
+    private fun drawDebugMatrix(canvas: Canvas) {
         for (xk in 0..100) {
             val x = xk * 100
             canvas.drawLine(x.toFloat(), 0f, x.toFloat(), canvas.height.toFloat(), gridPaint)
