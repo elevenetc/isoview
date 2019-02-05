@@ -1,7 +1,5 @@
 package com.elevenetc.android.grid
 
-import android.graphics.Canvas
-import com.elevenetc.android.grid.dynamic.DynamicItem
 import com.elevenetc.android.grid.dynamic.Square
 import com.elevenetc.android.grid.dynamic.Utils.Companion.sort
 import org.junit.Test
@@ -13,22 +11,6 @@ import org.junit.Test
  */
 class ExampleUnitTest {
 
-    data class Item(private val bounds: Bounds) : DynamicItem("") {
-
-        override fun getBounds(): Bounds {
-            return bounds
-        }
-
-
-        override fun draw(canvas: Canvas, angle: Float) {
-
-        }
-
-        override fun layout(angle: Float) {
-
-        }
-
-    }
 
     @Test
     fun testZ() {

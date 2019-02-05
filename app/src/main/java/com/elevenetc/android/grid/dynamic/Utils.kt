@@ -1,9 +1,12 @@
 package com.elevenetc.android.grid.dynamic
 
+import com.elevenetc.android.grid.Axis
+import com.elevenetc.android.grid.UnitModel
+
 class Utils {
     companion object {
 
-        fun layout(square: Square, k: Boolean) {
+        fun layout(square: UnitModel) {
 
             val unitWidth = square.unitWidth
             val unitHeight = square.unitHeight
@@ -17,31 +20,14 @@ class Utils {
             square.bottomPoint = PointF(isoX, isoY + unitHeight)
             square.leftPoint = PointF(isoX - unitWidth / 2, isoY + unitHeight / 2)
             square.rightPoint = PointF(isoX + unitWidth / 2, isoY + unitHeight / 2)
-
-//            if (k) {
-//                square.isoX = 0.5f
-//                val unitWidth = square.unitWidth
-//                val unitHeight = square.unitHeight
-//                val x = square.isoX
-//                val y = square.isoY
-//
-//                val isoX = x * (unitWidth / 2) - y * (unitWidth / 2)
-//                val isoY = (x + y) * (unitHeight / 2)
-//
-//                square.topPoint = PointF(isoX, isoY)
-//                square.bottomPoint = PointF(isoX, isoY + unitHeight)
-//                square.leftPoint = PointF(isoX - unitWidth / 2, isoY + unitHeight / 2)
-//                square.rightPoint = PointF(isoX + unitWidth / 2, isoY + unitHeight / 2)
-//            }
-
         }
 
-        fun sort(units: List<DynamicItem>): MutableList<DynamicItem> {
+        fun sort(units: List<UnitModel>): MutableList<UnitModel> {
             arrange(units)
 
-            println(units)
+            //println(units) valid
 
-            val result = mutableListOf<DynamicItem>()
+            val result = mutableListOf<UnitModel>()
             val u = mutableListOf(*units.toTypedArray())
 
             while (!u.isEmpty()) {
@@ -51,10 +37,13 @@ class Utils {
                     u.add(unit)
                 }
             }
+
+            println(result)
+
             return result
         }
 
-        fun sort(current: DynamicItem, result: MutableList<DynamicItem>) {
+        fun sort(current: UnitModel, result: MutableList<UnitModel>) {
 
 
             if (current.behind.isEmpty()) {
@@ -74,36 +63,35 @@ class Utils {
             }
         }
 
-        fun doOverlap(i1: DynamicItem, i2: DynamicItem): Boolean {
-            return doOverlapIn(DynamicMap.Axis.X, i1, i2)
-                    && doOverlapIn(DynamicMap.Axis.Y, i1, i2)
+        fun doOverlap(i1: UnitModel, i2: UnitModel): Boolean {
+            return doOverlapIn(Axis.X, i1, i2)
+                    || doOverlapIn(Axis.Y, i1, i2)
         }
 
-        fun doOverlapIn(a: DynamicMap.Axis, i1: DynamicItem, i2: DynamicItem): Boolean {
-            if (a == DynamicMap.Axis.X) {
-                return doOverlap(i1.isoX, i1.isoX + i1.isoXSize, i2.isoX, i2.isoX + i2.isoXSize)
-            } else if (a == DynamicMap.Axis.Y) {
-                return doOverlap(i1.isoY, i1.isoY + i1.isoYSize, i2.isoY, i2.isoY + i2.isoYSize)
-            } else {
-                return false
+        fun doOverlapIn(a: Axis, i1: UnitModel, i2: UnitModel): Boolean {
+            return when (a) {
+                Axis.X -> doOverlap(i1.isoX, i1.isoX + i1.isoXSize, i2.isoX, i2.isoX + i2.isoXSize)
+                Axis.Y -> doOverlap(i1.isoY, i1.isoY + i1.isoYSize, i2.isoY, i2.isoY + i2.isoYSize)
+                else -> false
             }
         }
 
         fun doOverlap(minA: Float, maxA: Float, minB: Float, maxB: Float): Boolean {
 
-            if (minA == minB && maxA == maxB) return true
 
+            if (minA.compareTo(minB) == 0 && maxA.compareTo(maxB) == 0) return true
+//            if (minA == minB && maxA == maxB) return true
             val overlapFirst = maxA >= minB && minA <= maxB
             val overlapSecond = maxB >= minA && minB <= maxA
             return overlapFirst || overlapSecond
         }
 
 
-        fun getFront(a: DynamicItem, b: DynamicItem): DynamicItem? {
+        fun getFront(a: UnitModel, b: UnitModel): UnitModel? {
 
 
-            val doOverlapInX = doOverlapIn(DynamicMap.Axis.X, a, b)
-            val doOverlapInY = doOverlapIn(DynamicMap.Axis.Y, a, b)
+            val doOverlapInX = doOverlapIn(Axis.X, a, b)
+            val doOverlapInY = doOverlapIn(Axis.Y, a, b)
 
             return if (doOverlapInX && doOverlapInY) {
 
@@ -125,7 +113,7 @@ class Utils {
             }
         }
 
-        fun arrange(items: List<DynamicItem>) {
+        fun arrange(items: List<UnitModel>) {
             items.forEach {
                 it.infont.clear()
                 it.behind.clear()
@@ -136,14 +124,16 @@ class Utils {
                 for (k in i + 1 until items.size) {
                     val b = items[k]
 
-                    val doOverlap = doOverlap(a, b)
+                    val doOverlap1 = doOverlap(a, b)
+                    val doOverlap2 = doOverlap(b, a)
 
-                    if (!doOverlap) continue
+                    if (!doOverlap1) continue
 
-                    val front = getFront(a, b)
+                    val front1 = getFront(a, b)
+                    val front2 = getFront(b, a)
 
-                    if (front != null) {
-                        if (a == front) {
+                    if (front1 != null) {
+                        if (a == front1) {
                             a.behind.add(b)
                             b.infont.add(a)
                         } else {

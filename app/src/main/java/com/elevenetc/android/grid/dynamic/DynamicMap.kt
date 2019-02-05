@@ -1,31 +1,35 @@
 package com.elevenetc.android.grid.dynamic
 
 import android.graphics.Canvas
-import com.elevenetc.android.grid.IsoComparator
 import com.elevenetc.android.grid.Map
+import com.elevenetc.android.grid.UnitModel
+import com.elevenetc.android.grid.UnitView
 
 class DynamicMap(val angle: Float) : Map {
 
-    var items = mutableListOf<DynamicItem>()
-    val isoComparator = IsoComparator()
+    val views = mutableListOf<UnitView>()
+    val models = mutableListOf<UnitModel>()
+    val viewModels = mutableMapOf<String, UnitView>()
 
-    fun addItem(item: DynamicItem) {
-        items.add(item)
+    fun addItem(view: UnitView) {
+        val model = view.model
+        views.add(view)
+        models.add(model)
+
+        viewModels[model.id] = view
     }
 
     override fun draw(canvas: Canvas) {
         val drawList = sort()
         drawList.forEach {
-            it.draw(canvas, angle)
+            viewModels[it.id]!!.draw(canvas)
         }
     }
 
-    fun sort(): List<DynamicItem> {
-        val sort = Utils.sort(items)
+    fun sort(): List<UnitModel> {
+        val sort = Utils.sort(models)
         return sort
     }
 
-    enum class Axis {
-        X, Y, NonAxis
-    }
+
 }

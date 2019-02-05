@@ -1,10 +1,7 @@
 package com.elevenetc.android.grid
 
-import android.util.Log
-import com.elevenetc.android.grid.dynamic.DynamicItem
-
-class IsoComparator : Comparator<DynamicItem> {
-    override fun compare(i1: DynamicItem, i2: DynamicItem): Int {
+class IsoComparator : Comparator<UnitModel> {
+    override fun compare(i1: UnitModel, i2: UnitModel): Int {
 
 
 //        val boundsA = i1.getBounds()

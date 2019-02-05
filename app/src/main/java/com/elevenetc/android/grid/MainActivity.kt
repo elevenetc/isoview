@@ -8,19 +8,20 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.elevenetc.android.grid.dynamic.DynamicMap
+import com.elevenetc.android.grid.dynamic.Square
 import com.elevenetc.android.grid.dynamic.Utils
 import com.elevenetc.android.grid.views.Cube
-import com.elevenetc.android.grid.views.Square
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var moving: com.elevenetc.android.grid.dynamic.Square
+    lateinit var moving: UnitView
     lateinit var map: DynamicMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setRestartActivity()
 
         val gridView = findViewById<GridMatrixView>(R.id.grid_view)
 
@@ -63,18 +64,26 @@ class MainActivity : AppCompatActivity() {
         set.start()
     }
 
+    private fun setRestartActivity() {
+        findViewById<View>(R.id.btn_restart).setOnClickListener {
+            val i = intent
+            finish()
+            startActivity(i)
+        }
+    }
+
     fun animate(from: Int, to: Int, xAxis: Boolean, grid: View): ValueAnimator {
         return ValueAnimator.ofFloat(from.toFloat(), to.toFloat()).apply {
             duration = 1000L
             addUpdateListener {
 
                 if (xAxis) {
-                    moving.isoX = it.animatedValue as Float
+                    moving.model.isoX = it.animatedValue as Float
                 } else {
-                    moving.isoY = it.animatedValue as Float
+                    moving.model.isoY = it.animatedValue as Float
                 }
 
-                Utils.layout(moving, false)
+                Utils.layout(moving.model)
                 grid.invalidate()
             }
         }
@@ -83,30 +92,32 @@ class MainActivity : AppCompatActivity() {
     private fun initDynamicMap(): DynamicMap {
         map = DynamicMap(130f)
 
-        val builder = com.elevenetc.android.grid.dynamic.Square.Builder(200f, 100f)
+        val builder = Builder(200f, 100f)
         val movingId = "moving"
-        val units = builder
+        val views = builder
 
-                .addRect(1, 2, 5, 1, Color.RED, "long-red")
-                .addSquare(4, 0, Color.CYAN, "cyan")
-                .addSquare(3, 3, Color.BLUE, "blue")
-                .addSquare(1, 3, Color.YELLOW, "yellow")
-                .addSquare(0, 0, Color.GREEN, "green")
-                .addRect(2, 3, 1, 2, Color.GRAY, "gray")
-                .addSquare(1, 0, Color.BLUE, "blue-2")
-                .addSquare(2, 0, Color.MAGENTA, "magenta")
-                .addSquare(3, 0, Color.BLACK, "black")
-                .addSquare(5, 0, Color.LTGRAY, "lt-gray")
+                //.addRect(1, 2, 5, 1, Color.RED, "long-red")
+//                .addSquare(4, 0, Color.CYAN, "cyan")
+//                .addSquare(3, 3, Color.BLUE, "blue")
+//                .addSquare(1, 3, Color.YELLOW, "yellow")
+                .addSquare(0, 0, Square(Color.GREEN), "green")
+                .addSquare(1, 1, Square(Color.RED), "red")
+                .addSquare(1, 0, Square(Color.YELLOW), "yellow")
+//                .addRect(2, 3, 1, 2, Color.GRAY, "gray")
+//                .addSquare(1, 0, Color.BLUE, "blue-2")
+//                .addSquare(2, 0, Color.MAGENTA, "magenta")
+//                .addSquare(3, 0, Color.BLACK, "black")
+//                .addSquare(5, 0, Color.LTGRAY, "lt-gray")
 
-                .addSquare(0, 1, Color.YELLOW, movingId)
+                .addSquare(0, 1, Square(Color.YELLOW), movingId)
                 .translate(400f, 400f)
                 .build()
 
-        units.forEach {
+        views.forEach {
             map.addItem(it)
         }
 
-        moving = units.first { it.id == movingId }
+        moving = views.first { v -> v.id == movingId }
 
         return map
     }
@@ -143,10 +154,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initSmallRects(): StaticMap {
         val model = StaticMap(5, 5, 200f, 25f)
-        model.addItem(Square("0"), 0, 0)
-        model.addItem(Square("1"), 0, 1)
-        model.addItem(Square("2"), 1, 1)
-        model.addItem(Square("3"), 1, 0)
+//        model.addItem(Square("0"), 0, 0)
+//        model.addItem(Square("1"), 0, 1)
+//        model.addItem(Square("2"), 1, 1)
+//        model.addItem(Square("3"), 1, 0)
         return model
     }
 }
