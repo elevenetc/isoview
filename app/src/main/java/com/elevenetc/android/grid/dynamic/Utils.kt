@@ -86,31 +86,50 @@ class Utils {
             return overlapFirst || overlapSecond
         }
 
+        fun getFront(a: UnitModel, b: UnitModel, axis: Axis): UnitModel {
+            if (axis == Axis.X) {
+                //a:     ---
+                //b: ---
+                if (a.isoX > b.isoX + b.isoXSize) return a
+                //a: ---
+                //b:     ---
+                else if (b.isoX > a.isoX + a.isoXSize) return b
+            }
+        }
+
 
         fun getFront(a: UnitModel, b: UnitModel): UnitModel? {
 
-
-            val doOverlapInX = doOverlapIn(Axis.X, a, b)
-            val doOverlapInY = doOverlapIn(Axis.Y, a, b)
-
-            return if (doOverlapInX && doOverlapInY) {
-
-                when {
-                    a.isoX == b.isoX + b.isoXSize -> a
-                    b.isoX == a.isoX + a.isoXSize -> b
-                    a.isoY == b.isoY + b.isoYSize -> a
-                    b.isoY == a.isoY + a.isoYSize -> b
-                    else -> null
-                }
-
-
-            } else if (doOverlapInX) {
-                if (a.isoX < b.isoX) b else a
-            } else if (doOverlapInY) {
-                if (a.isoY < b.isoY) b else a
-            } else {
-                null
+            return when {
+                a.isoX == b.isoX + b.isoXSize -> a
+                b.isoX == a.isoX + a.isoXSize -> b
+                a.isoY == b.isoY + b.isoYSize -> a
+                b.isoY == a.isoY + a.isoYSize -> b
+                else -> null
             }
+
+
+//            val doOverlapInX = doOverlapIn(Axis.X, a, b)
+//            val doOverlapInY = doOverlapIn(Axis.Y, a, b)
+//
+//            return if (doOverlapInX || doOverlapInY) {
+//
+//                when {
+//                    a.isoX == b.isoX + b.isoXSize -> a
+//                    b.isoX == a.isoX + a.isoXSize -> b
+//                    a.isoY == b.isoY + b.isoYSize -> a
+//                    b.isoY == a.isoY + a.isoYSize -> b
+//                    else -> null
+//                }
+//
+//
+//            } else if (doOverlapInX) {
+//                if (a.isoX < b.isoX) b else a
+//            } else if (doOverlapInY) {
+//                if (a.isoY < b.isoY) b else a
+//            } else {
+//                null
+//            }
         }
 
         fun arrange(items: List<UnitModel>) {

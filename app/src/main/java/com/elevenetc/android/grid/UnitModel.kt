@@ -33,6 +33,10 @@ class UnitModel(val id: String) {
                 topPoint.y, bottomPoint.y
         )
     }
+
+    override fun toString(): String {
+        return "$id"
+    }
 }
 
 enum class Axis {

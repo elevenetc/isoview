@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        set.start()
+        //set.start()
     }
 
     private fun setRestartActivity() {
@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
 //                .addSquare(3, 3, Color.BLUE, "blue")
 //                .addSquare(1, 3, Color.YELLOW, "yellow")
                 .addSquare(0, 0, Square(Color.GREEN), "green")
-                .addSquare(1, 1, Square(Color.RED), "red")
-                .addSquare(1, 0, Square(Color.YELLOW), "yellow")
+//                .addSquare(1, 1, Square(Color.RED), "red")
+//                .addSquare(1, 0, Square(Color.CYAN), "cyan")
 //                .addRect(2, 3, 1, 2, Color.GRAY, "gray")
 //                .addSquare(1, 0, Color.BLUE, "blue-2")
 //                .addSquare(2, 0, Color.MAGENTA, "magenta")
