@@ -27,20 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         gridView.init(initDynamicMap())
 
-        val a = animate(0, 6, true, gridView)
-        val b = animate(1, 5, false, gridView)
-        val c = animate(6, 0, true, gridView)
-        val d = animate(5, 1, false, gridView)
-//        val set = AnimatorSet().apply {
-//            playSequentially(a, b, c, d)
-//        }
-
-        val set = AnimatorSet().apply {
-            playSequentially(
-                    animate(1, 2, false, gridView),
-                    animate(2, 1, false, gridView)
-            )
-        }
+        val set = mulripleSteps(gridView)
+//        val set = singleAnimatedStep(gridView)
 
         set.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(animation: Animator?) {
@@ -61,7 +49,28 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        //set.start()
+        set.start()
+    }
+
+    private fun mulripleSteps(gridView: GridMatrixView): AnimatorSet {
+        val a = animate(0, 6, true, gridView)
+        val b = animate(1, 5, false, gridView)
+        val c = animate(6, 0, true, gridView)
+        val d = animate(5, 1, false, gridView)
+        return AnimatorSet().apply {
+            playSequentially(a, b, c, d)
+
+        }
+    }
+
+    private fun singleAnimatedStep(gridView: GridMatrixView): AnimatorSet {
+        val set = AnimatorSet().apply {
+            playSequentially(
+                    animate(1, 2, false, gridView),
+                    animate(2, 1, false, gridView)
+            )
+        }
+        return set
     }
 
     private fun setRestartActivity() {
@@ -74,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     fun animate(from: Int, to: Int, xAxis: Boolean, grid: View): ValueAnimator {
         return ValueAnimator.ofFloat(from.toFloat(), to.toFloat()).apply {
-            duration = 1000L
+            duration = 3000L
             addUpdateListener {
 
                 if (xAxis) {
@@ -89,29 +98,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    val movingId = "moving"
+
     private fun initDynamicMap(): DynamicMap {
-        map = DynamicMap(130f)
+        map = DynamicMap()
 
         val builder = Builder(200f, 100f)
-        val movingId = "moving"
-        val views = builder
 
-                //.addRect(1, 2, 5, 1, Color.RED, "long-red")
-//                .addSquare(4, 0, Color.CYAN, "cyan")
-//                .addSquare(3, 3, Color.BLUE, "blue")
-//                .addSquare(1, 3, Color.YELLOW, "yellow")
-                .addSquare(0, 0, Square(Color.GREEN), "green")
-//                .addSquare(1, 1, Square(Color.RED), "red")
-//                .addSquare(1, 0, Square(Color.CYAN), "cyan")
-//                .addRect(2, 3, 1, 2, Color.GRAY, "gray")
-//                .addSquare(1, 0, Color.BLUE, "blue-2")
-//                .addSquare(2, 0, Color.MAGENTA, "magenta")
-//                .addSquare(3, 0, Color.BLACK, "black")
-//                .addSquare(5, 0, Color.LTGRAY, "lt-gray")
-
-                .addSquare(0, 1, Square(Color.YELLOW), movingId)
-                .translate(400f, 400f)
-                .build()
+        //val views = justTwo(builder)
+        val views = justSeven(builder)
 
         views.forEach {
             map.addItem(it)
@@ -120,6 +115,26 @@ class MainActivity : AppCompatActivity() {
         moving = views.first { v -> v.id == movingId }
 
         return map
+    }
+
+    private fun justSeven(builder: Builder): List<UnitView> {
+        val views = builder
+                .addSquare(0, 1, Square(Color.YELLOW), movingId)
+                .addSquare(0, 0, Square(Color.GREEN), "green")
+                .addSquare(1, 0, Square(Color.RED), "red")
+                .addSquare(2, 0, Square(Color.CYAN), "CYAN")
+                .translate(400f, 400f)
+                .build()
+        return views
+    }
+
+    private fun justTwo(builder: Builder): List<UnitView> {
+        val views = builder
+                .addSquare(0, 1, Square(Color.YELLOW), movingId)
+                .addSquare(0, 0, Square(Color.GREEN), "green")
+                .translate(400f, 400f)
+                .build()
+        return views
     }
 
     private fun initRandom(): StaticMap {

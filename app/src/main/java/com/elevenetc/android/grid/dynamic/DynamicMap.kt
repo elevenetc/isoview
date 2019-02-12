@@ -5,7 +5,7 @@ import com.elevenetc.android.grid.Map
 import com.elevenetc.android.grid.UnitModel
 import com.elevenetc.android.grid.UnitView
 
-class DynamicMap(val angle: Float) : Map {
+class DynamicMap : Map {
 
     val views = mutableListOf<UnitView>()
     val models = mutableListOf<UnitModel>()

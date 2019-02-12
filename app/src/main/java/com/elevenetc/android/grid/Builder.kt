@@ -30,7 +30,7 @@ class Builder(val unitWidth: Float, val unitHeight: Float) {
         model.isoYSize = 1f
 
         if (id.equals("moving")) {
-            model.isoY = 1.3f
+            //model.isoY = 1.3f
         }
 
         Utils.layout(model)

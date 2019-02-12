@@ -45,5 +45,10 @@ class MathUtilsTests {
         assertThat(Utils.doOverlap(2f, 3f, 0f, 1f)).isFalse()
     }
 
+    @Test
+    fun doZ() {
+
+    }
+
 
 }
