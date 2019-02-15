@@ -7,8 +7,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.elevenetc.android.grid.dynamic.Box
 import com.elevenetc.android.grid.dynamic.DynamicMap
-import com.elevenetc.android.grid.dynamic.Square
 import com.elevenetc.android.grid.dynamic.Utils
 import com.elevenetc.android.grid.views.Cube
 
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        set.start()
+        //set.start()
     }
 
     private fun mulripleSteps(gridView: GridMatrixView): AnimatorSet {
@@ -119,10 +119,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun justSeven(builder: Builder): List<UnitView> {
         val views = builder
-                .addSquare(0, 1, Square(Color.YELLOW), movingId)
-                .addSquare(0, 0, Square(Color.GREEN), "green")
-                .addSquare(1, 0, Square(Color.RED), "red")
-                .addSquare(2, 0, Square(Color.CYAN), "CYAN")
+                .addSquare(0, 1, Box(Color.YELLOW), movingId)
+
+                .addSquare(0, 0, Box(Color.GREEN), "green")
+//                .addSquare(1, 0, Box(Color.RED), "red")
+//                .addSquare(2, 0, Box(Color.CYAN), "CYAN")
+
+//                .addSquare(1, 2, Box(Color.MAGENTA), "mag")
+
+                .addRect(1, 2, 5, 1, Box(Color.MAGENTA), "long-magenta")
+//                .addRect(1, 3, 4, 1, Box(Color.DKGRAY), "long-dkgray")
+//                .addRect(1, 4, 3, 1, Box(Color.GREEN), "long-green")
+
                 .translate(400f, 400f)
                 .build()
         return views
@@ -130,8 +138,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun justTwo(builder: Builder): List<UnitView> {
         val views = builder
-                .addSquare(0, 1, Square(Color.YELLOW), movingId)
-                .addSquare(0, 0, Square(Color.GREEN), "green")
+                .addSquare(0, 1, Box(Color.YELLOW), movingId)
+                .addSquare(0, 0, Box(Color.GREEN), "green")
                 .translate(400f, 400f)
                 .build()
         return views

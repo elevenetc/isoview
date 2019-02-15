@@ -18,7 +18,6 @@ class Builder(val unitWidth: Float, val unitHeight: Float) {
         val model = UnitModel(id ?: getId())
 
         view.model = model
-
         view.id = model.id
 
         model.view = view
@@ -40,16 +39,25 @@ class Builder(val unitWidth: Float, val unitHeight: Float) {
         return this
     }
 
-    fun addRect(x: Int, y: Int, xSize: Int, ySize: Int, color: Int, view: UnitView, id: String? = null): Builder {
+    fun addRect(x: Int, y: Int, xSize: Int, ySize: Int, view: UnitView, id: String? = null): Builder {
 
         val model = UnitModel(id ?: getId())
 
         view.model = model
+        view.id = model.id
+
+        model.view = view
+        model.unitWidth = unitWidth
+        model.unitHeight = unitHeight
+        model.isoX = x.toFloat()
+        model.isoY = y.toFloat()
+        model.isoXSize = xSize.toFloat()
+        model.isoYSize = ySize.toFloat()
+
 
         val topX = isoToScreenX(x, y)
         val topY = isoToScreenY(x, y)
         model.topPoint = PointF(topX, topY)
-
 
         val leftX = x
         val leftY = y + ySize
@@ -63,12 +71,8 @@ class Builder(val unitWidth: Float, val unitHeight: Float) {
         val bottomY = y + ySize
         model.bottomPoint = PointF(isoToScreenX(bottomX, bottomY), isoToScreenY(bottomX, bottomY))
 
-        model.view = view
 
-        model.isoX = x.toFloat()
-        model.isoY = y.toFloat()
-        model.isoXSize = xSize.toFloat()
-        model.isoYSize = ySize.toFloat()
+        //Utils.layout(model)
 
         views.add(view)
 
@@ -90,10 +94,6 @@ class Builder(val unitWidth: Float, val unitHeight: Float) {
     }
 
     fun build(): List<UnitView> {
-        views.forEach {
-            //it.screenWidth = unitWidth
-            //it.screenHeight = unitHeight
-        }
         return views
     }
 

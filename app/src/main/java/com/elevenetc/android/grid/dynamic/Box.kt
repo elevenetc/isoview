@@ -6,7 +6,7 @@ import android.graphics.Path
 import com.elevenetc.android.grid.UnitView
 import com.elevenetc.android.grid.utils.drawRect
 
-class Square(color: Int) : UnitView() {
+class Box(color: Int) : UnitView() {
 
 
     val paint = Paint().apply {
@@ -26,5 +26,4 @@ class Square(color: Int) : UnitView() {
         drawRect(model.topPoint.x, model.topPoint.y, model.bottomPoint.x, model.bottomPoint.y, model.leftPoint, model.rightPoint, path, paint, canvas)
         canvas.restore()
     }
-
 }

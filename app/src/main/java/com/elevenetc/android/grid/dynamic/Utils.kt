@@ -23,27 +23,25 @@ class Utils {
         }
 
         fun sort(units: List<UnitModel>): MutableList<UnitModel> {
-            arrange(units)
+            buildTree(units)
+            return sortTree(units)
+        }
 
-            //println(units) valid
-
+        private fun sortTree(units: List<UnitModel>): MutableList<UnitModel> {
             val result = mutableListOf<UnitModel>()
             val u = mutableListOf(*units.toTypedArray())
 
             while (!u.isEmpty()) {
                 val unit = u.removeAt(0)
-                sort(unit, result)
+                sortBehindOf(unit, result)
                 if (!result.contains(unit)) {
                     u.add(unit)
                 }
             }
-
-            println(result)
-
             return result
         }
 
-        fun sort(current: UnitModel, result: MutableList<UnitModel>) {
+        fun sortBehindOf(current: UnitModel, result: MutableList<UnitModel>) {
 
 
             if (current.behind.isEmpty()) {
@@ -58,7 +56,7 @@ class Utils {
             } else {
 
                 current.behind.forEach { behind ->
-                    sort(behind, result)
+                    sortBehindOf(behind, result)
                 }
             }
         }
@@ -76,20 +74,32 @@ class Utils {
             }
         }
 
+        fun doOverlapView(a: UnitModel, b: UnitModel): Boolean {
+            return if (a.leftPoint.x.compareTo(b.leftPoint.x) == 0) {
+                true
+            } else if (a.rightPoint.x.compareTo(b.rightPoint.x) == 0) {
+                true
+            } else if (a.rightPoint.x > b.leftPoint.x) {
+                true
+            } else a.rightPoint.x > b.leftPoint.x
+        }
+
         fun doOverlap(minA: Float, maxA: Float, minB: Float, maxB: Float): Boolean {
-            //if (minA.compareTo(minB) == 0 && maxA.compareTo(maxB) == 0) return true
             val overlapFirst = maxA > minB && minA < maxB
             val overlapSecond = maxB > minA && minB < maxA
             return overlapFirst || overlapSecond
         }
 
-
         fun getFront(a: UnitModel, b: UnitModel): UnitModel? {
+
+
+            if (!doOverlapView(a, b)) return null
 
             val doOverlapInX = doOverlapIn(Axis.X, a, b)
             val doOverlapInY = doOverlapIn(Axis.Y, a, b)
 
-            return if ((doOverlapInX && doOverlapInY) || (!doOverlapInX && !doOverlapInY)) {
+            //return if ((doOverlapInX && doOverlapInY) || (!doOverlapInX && !doOverlapInY)) {
+            return if ((doOverlapInX && doOverlapInY)) {
 
                 val sumA = a.isoX + a.isoY
                 val sumB = b.isoX + b.isoY
@@ -98,25 +108,30 @@ class Utils {
 
             } else if (doOverlapInX) {
                 if (a.isoY > b.isoY) a else b
-            } else {
-                //doOverlapInY = true
+            } else if (doOverlapInY) {
                 if (a.isoX > b.isoX) a else b
+            } else {
+                null
             }
         }
 
-        fun arrange(items: List<UnitModel>) {
+        /**
+         * Compares every unit with every unit
+         * arranging items behind and infront
+         */
+        fun buildTree(units: List<UnitModel>) {
 
-            items.forEach {
-                it.infont.clear()
-                it.behind.clear()
+            units.forEach { unit ->
+                unit.infont.clear()
+                unit.behind.clear()
             }
 
-            for (i in 0 until items.size) {
+            for (idxA in 0 until units.size) {
 
-                val a = items[i]
+                val a = units[idxA]
 
-                for (k in i + 1 until items.size) {
-                    val b = items[k]
+                for (idxB in idxA + 1 until units.size) {
+                    val b = units[idxB]
 
                     val front = getFront(a, b)
 
